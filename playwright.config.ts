@@ -17,7 +17,7 @@ export default defineConfig({
   ],
   use: {
     baseURL: process.env.BASE_URL || 'https://serverest.dev',
-    trace: 'retain-on-failure',
-    screenshot: 'only-on-failure',
+    trace: 'on',
+    screenshot: 'on',
   },
 });

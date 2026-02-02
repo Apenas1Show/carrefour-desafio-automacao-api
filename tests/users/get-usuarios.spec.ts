@@ -10,20 +10,18 @@ test.describe('GET /users - Listar Usuários', () => {
   });
 
   test('Deve retornar lista de usuários com status 200', async () => {
-    // Arrange & Act
+    // Dispara o get e armazena o resultado no response
     const response = await apiClient.get('/usuarios');
 
-    // Assert
+    // Validações do retorno
     expect(response.status).toBe(200);
     expect(response.data).toHaveProperty('usuarios');
     expect(Array.isArray(response.data.usuarios)).toBeTruthy();
   });
 
   test('Deve retornar a quantidade de usuários cadastrados', async () => {
-    // Arrange & Act
     const response = await apiClient.get('/usuarios');
 
-    // Assert
     expect(response.status).toBe(200);
     expect(response.data).toHaveProperty('quantidade');
     expect(typeof response.data.quantidade).toBe('number');
@@ -31,10 +29,8 @@ test.describe('GET /users - Listar Usuários', () => {
   });
 
   test('Deve retornar usuários com estrutura correta', async () => {
-    // Arrange & Act
     const response = await apiClient.get('/usuarios');
 
-    // Assert
     expect(response.status).toBe(200);
     
     if (response.data.usuarios.length > 0) {

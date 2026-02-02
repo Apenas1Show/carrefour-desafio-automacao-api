@@ -1,0 +1,4 @@
+
+🔍 Consistência de Dados:
+   Requisições: 15
+   Variações de quantidade: 1

@@ -1,0 +1,2 @@
+✓ 50 requisições completadas em 1313ms
+✓ Média: 26.26ms por requisição

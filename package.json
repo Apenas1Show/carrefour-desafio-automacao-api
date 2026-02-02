@@ -10,8 +10,13 @@
     "test": "playwright test",
     "test:headed": "playwright test --headed",
     "test:debug": "playwright test --debug",
+    "test:ui": "playwright test --ui",
     "test:report": "playwright show-report reports/html-report",
-    "test:ui": "playwright test --ui"
+    "allure:generate": "allure generate allure-results --clean -o allure-report",
+    "allure:open": "allure open allure-report",
+    "allure:serve": "allure serve allure-results",
+    "test:allure": "npm test && npm run allure:generate && npm run allure:open",
+    "clean:reports": "rm -rf reports allure-results allure-report test-results"
   },
   "keywords": [
     "api-testing",
@@ -24,6 +29,10 @@
   "devDependencies": {
     "@playwright/test": "^1.58.1",
     "@types/node": "^25.2.0",
+    "ajv": "^8.17.1",
+    "ajv-formats": "^3.0.1",
+    "allure-commandline": "^2.36.0",
+    "allure-playwright": "^3.4.5",
     "axios": "^1.13.4",
     "dotenv": "^17.2.3",
     "typescript": "^5.9.3"

@@ -1,6 +1,7 @@
 import { test, expect } from '@playwright/test';
 import { ApiClient } from '../utils/clientes';
 import { ConstrutorDeDadosDeTeste } from '../utils/construtor';
+import { AllureHelper, Severity } from '../utils/allure-helpers';
 
 test.describe('POST /usuarios - Criar Usuário', () => {
   let apiClient: ApiClient;
@@ -11,15 +12,35 @@ test.describe('POST /usuarios - Criar Usuário', () => {
   });
 
   test('Deve criar um novo usuário com sucesso', async () => {
-    const novoUsuario = ConstrutorDeDadosDeTeste.gerarUsuarioValido();
-    const response = await apiClient.post('/usuarios', novoUsuario);
+    AllureHelper.severity(Severity.CRITICAL);
+    AllureHelper.feature('Gerenciamento de Usuários');
+    AllureHelper.story('Criação de Usuário');
+    AllureHelper.tag('smoke');
+    AllureHelper.tag('regression');
 
-    expect(response.status).toBe(201);
-    expect(response.data).toHaveProperty('message', 'Cadastro realizado com sucesso');
-    expect(response.data).toHaveProperty('_id');
-    expect(typeof response.data._id).toBe('string');
-    expect(response.data._id).not.toBe('');
+    await AllureHelper.step('Preparar dados do novo usuário', async () => {
+      const novoUsuario = ConstrutorDeDadosDeTeste.gerarUsuarioValido();
+      AllureHelper.attachJSON('Dados do Usuário', novoUsuario);
+
+      await AllureHelper.step('Enviar requisição POST /usuarios', async () => {
+        const response = await apiClient.post('/usuarios', novoUsuario);
+        
+        AllureHelper.attachJSON('Response', {
+          status: response.status,
+          data: response.data,
+        });
+
+        await AllureHelper.step('Validar resposta', async () => {
+          expect(response.status).toBe(201);
+          expect(response.data).toHaveProperty('message', 'Cadastro realizado com sucesso');
+          expect(response.data).toHaveProperty('_id');
+          expect(typeof response.data._id).toBe('string');
+          expect(response.data._id).not.toBe('');
+        });
+      });
+    });
   });
+
 
   test('Deve criar um usuário administrador com sucesso', async () => {
     const usuarioAdmin = ConstrutorDeDadosDeTeste.gerarUsuarioAdmin();

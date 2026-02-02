@@ -1,0 +1,33 @@
+# Depenencias do desafio
+node_modules/
+package-lock.json
+yarn.lock
+
+# variáveis de ambiente
+.env
+
+# Relatórios de evidencias dos testes
+reports/
+test-results/
+playwright-report/
+
+# Playwright
+.playwright/
+
+# Build
+dist/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+npm-debug.log*

@@ -1,0 +1,6 @@
+
+📈 SLA Performance:
+   Requisições testadas: 20
+   Dentro do SLA: 20
+   Fora do SLA: 0
+   Percentual de sucesso: 100.00%

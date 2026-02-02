@@ -12,11 +12,13 @@
     "test:debug": "playwright test --debug",
     "test:ui": "playwright test --ui",
     "test:report": "playwright show-report reports/html-report",
-    "allure:generate": "allure generate allure-results --clean -o allure-report",
-    "allure:open": "allure open allure-report",
-    "allure:serve": "allure serve allure-results",
-    "test:allure": "npm test && npm run allure:generate && npm run allure:open",
-    "clean:reports": "rm -rf reports allure-results allure-report test-results"
+    "allure:generate": "allure generate reports/allure-results --clean -o reports/allure-report",
+    "allure:open": "allure open reports/allure-report",
+    "allure:serve": "allure serve reports/allure-results",
+    "report:all": "npm run test:report && npm run allure:generate && npm run allure:open",
+    "report:summary": "node scripts/generate-summary.js",
+    "clean:reports": "rm -rf reports test-results playwright-report",
+    "test:full": "npm run clean:reports && npm test && npm run report:summary"
   },
   "keywords": [
     "api-testing",

@@ -1,0 +1,6 @@
+
+🔄 Requisições Paralelas:
+   Total enviadas: 20
+   Sucesso (200): 20
+   Falhas: 0
+   Tempo total: 1272ms

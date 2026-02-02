@@ -1,5 +1,10 @@
 # 🏦 Banco Carrefour - Testes automatizados de API
 
+![API Tests](https://github.com/Apenas1Show/carrefour-desafio-automacao-api/actions/workflows/api-tests.yml/badge.svg)
+![Node Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)
+![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
+![License](https://img.shields.io/badge/license-MIT-blue)
+
 Projeto de automação de testes de API para o desafio técnico de QA Senior do Banco Carrefour.
 
 ## 📋 Sobre o Projeto

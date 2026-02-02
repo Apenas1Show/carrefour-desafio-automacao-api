@@ -1,0 +1,50 @@
+name: Create Release
+
+on:
+  push:
+    tags:
+      - 'v*.*.*'
+
+jobs:
+  release:
+    name: Create Release
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 📥 Checkout código
+        uses: actions/checkout@v4
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20.x'
+
+      - name: 📦 Instalar dependências
+        run: npm ci
+
+      - name: 🧪 Executar testes
+        run: npm test
+
+      - name: 📊 Gerar relatório
+        run: npm run report:summary
+
+      - name: 📝 Criar Release
+        uses: actions/create-release@v1
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        with:
+          tag_name: ${{ github.ref }}
+          release_name: Release ${{ github.ref }}
+          body: |
+            ## 🎉 Nova Release
+            
+            ### 📊 Cobertura de Testes
+            - Todos os testes executados com sucesso
+            - Relatórios disponíveis nos artefatos
+            
+            ### 📁 Artefatos
+            - Relatório HTML
+            - Relatório Allure
+            - Relatório Executivo
+          draft: false
+          prerelease: false

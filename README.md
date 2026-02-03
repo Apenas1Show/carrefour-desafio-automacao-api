@@ -1,6 +1,6 @@
 # 🏦 Banco Carrefour - API Test Automation
 
-![API Tests](https://github.com/SEU-USUARIO/carrefour-api-test-automation/actions/workflows/api-tests.yml/badge.svg)
+![API Tests](https://github.com/Apenas1Show/carrefour-desafio-automacao-api/actions/workflows/api-tests.yml/badge.svg)
 ![Node Version](https://img.shields.io/badge/node-%3E%3D18.0.0-brightgreen)
 ![Coverage](https://img.shields.io/badge/coverage-100%25-brightgreen)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.3-blue)

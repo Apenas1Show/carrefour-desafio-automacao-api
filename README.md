@@ -353,8 +353,8 @@ npm run clean:reports
 
 **Rafael Bertolai**
 
-- LinkedIn: [seu-linkedin](https://www.linkedin.com/in/obertolai/)
-- GitHub: [@seu-usuario](https://github.com/Apenas1Show/)
+- LinkedIn: [Rafael Bertolai](https://www.linkedin.com/in/obertolai/)
+- GitHub: [@Apenas1Show](https://github.com/Apenas1Show/)
 - Email: rafaelbertolai2@gmail.com
 
 ---

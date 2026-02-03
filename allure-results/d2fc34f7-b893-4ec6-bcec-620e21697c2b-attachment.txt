@@ -1,0 +1,5 @@
+
+📊 Estatísticas de Performance:
+   Tempo médio: 588.30ms
+   Tempo mínimo: 369ms
+   Tempo máximo: 1010ms

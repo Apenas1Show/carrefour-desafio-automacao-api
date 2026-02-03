@@ -1,49 +1,84 @@
 const fs = require('fs');
 const path = require('path');
 
+// Criar diretório de reports se não existir
+const reportsDir = path.join(__dirname, '../reports');
+if (!fs.existsSync(reportsDir)) {
+  fs.mkdirSync(reportsDir, { recursive: true });
+}
+
+// Ler resultados dos testes
 const resultsPath = path.join(__dirname, '../reports/test-results.json');
 
 if (!fs.existsSync(resultsPath)) {
-  console.error('❌ Arquivo de resultados não encontrado!');
-  process.exit(1);
+  console.warn('⚠️  Arquivo de resultados não encontrado. Criando relatório básico...');
+  
+  const basicReport = `
+# 📊 Relatório Executivo de Testes - Carrefour Bank API
+
+**Data da Execução:** ${new Date().toLocaleString('pt-BR')}
+
+---
+
+## ⚠️ Status
+
+Arquivo de resultados não encontrado. Os testes podem não ter sido executados completamente.
+
+---
+
+**Relatório gerado automaticamente**
+`;
+  
+  const reportPath = path.join(reportsDir, 'EXECUTIVE_SUMMARY.md');
+  fs.writeFileSync(reportPath, basicReport);
+  console.log('✅ Relatório básico criado');
+  process.exit(0);
 }
 
-const results = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
+try {
+  const results = JSON.parse(fs.readFileSync(resultsPath, 'utf8'));
 
-const stats = {
-  total: 0,
-  passed: 0,
-  failed: 0,
-  skipped: 0,
-  duration: 0,
-  suites: {}
-};
+  // Processar resultados
+  const stats = {
+    total: 0,
+    passed: 0,
+    failed: 0,
+    skipped: 0,
+    duration: 0,
+    suites: {}
+  };
 
-results.suites?.forEach(suite => {
-  suite.specs?.forEach(spec => {
-    stats.total++;
-    const testStatus = spec.tests?.[0]?.results?.[0]?.status || 'unknown';
-    
-    if (testStatus === 'passed') stats.passed++;
-    else if (testStatus === 'failed') stats.failed++;
-    else if (testStatus === 'skipped') stats.skipped++;
-    
-    stats.duration += spec.tests?.[0]?.results?.[0]?.duration || 0;
+  if (results.suites) {
+    results.suites.forEach(suite => {
+      if (suite.specs) {
+        suite.specs.forEach(spec => {
+          stats.total++;
+          const testStatus = spec.tests?.[0]?.results?.[0]?.status || 'unknown';
+          
+          if (testStatus === 'passed') stats.passed++;
+          else if (testStatus === 'failed') stats.failed++;
+          else if (testStatus === 'skipped') stats.skipped++;
+          
+          stats.duration += spec.tests?.[0]?.results?.[0]?.duration || 0;
 
-    const suiteName = suite.title || 'Outros';
-    if (!stats.suites[suiteName]) {
-      stats.suites[suiteName] = { passed: 0, failed: 0, total: 0 };
-    }
-    stats.suites[suiteName].total++;
-    if (testStatus === 'passed') stats.suites[suiteName].passed++;
-    if (testStatus === 'failed') stats.suites[suiteName].failed++;
-  });
-});
+          // Agrupar por suite
+          const suiteName = suite.title || 'Outros';
+          if (!stats.suites[suiteName]) {
+            stats.suites[suiteName] = { passed: 0, failed: 0, total: 0 };
+          }
+          stats.suites[suiteName].total++;
+          if (testStatus === 'passed') stats.suites[suiteName].passed++;
+          if (testStatus === 'failed') stats.suites[suiteName].failed++;
+        });
+      }
+    });
+  }
 
-const percentualSucesso = ((stats.passed / stats.total) * 100).toFixed(2);
-const duracaoMinutos = (stats.duration / 1000 / 60).toFixed(2);
+  // Gerar relatório
+  const percentualSucesso = stats.total > 0 ? ((stats.passed / stats.total) * 100).toFixed(2) : '0';
+  const duracaoMinutos = (stats.duration / 1000 / 60).toFixed(2);
 
-const report = `
+  const report = `
 # 📊 Relatório Executivo de Testes - Carrefour Bank API
 
 **Data da Execução:** ${new Date().toLocaleString('pt-BR')}
@@ -68,7 +103,7 @@ const report = `
 | Suite de Testes | Total | ✅ Passou | ❌ Falhou | Taxa |
 |----------------|-------|-----------|-----------|------|
 ${Object.entries(stats.suites).map(([suite, data]) => {
-  const taxa = ((data.passed / data.total) * 100).toFixed(0);
+  const taxa = data.total > 0 ? ((data.passed / data.total) * 100).toFixed(0) : '0';
   return `| ${suite} | ${data.total} | ${data.passed} | ${data.failed} | ${taxa}% |`;
 }).join('\n')}
 
@@ -77,25 +112,23 @@ ${Object.entries(stats.suites).map(([suite, data]) => {
 ## 🏆 Status do Projeto
 
 ${stats.failed === 0 
-  ? '✅ **TODOS OS TESTES PASSARAM!** O projeto está pronto para produção.' 
+  ? '✅ **TODOS OS TESTES PASSARAM!** O projeto está pronto para revisão.' 
   : `⚠️ **${stats.failed} TESTE(S) FALHARAM!** Revisar antes de prosseguir.`}
-
----
-
-## 📋 Próximos Passos
-
-${stats.failed === 0 
-  ? '- ✅ Revisar relatório Allure detalhado\n- ✅ Preparar para deploy\n- ✅ Documentar cobertura de testes' 
-  : '- ❌ Corrigir testes falhados\n- ❌ Re-executar suite completa\n- ❌ Validar com equipe'}
 
 ---
 
 **Relatório gerado automaticamente pela automação de testes**
 `;
 
-const reportPath = path.join(__dirname, '../reports/EXECUTIVE_SUMMARY.md');
-fs.writeFileSync(reportPath, report);
+  // Salvar relatório
+  const reportPath = path.join(__dirname, '../reports/EXECUTIVE_SUMMARY.md');
+  fs.writeFileSync(reportPath, report);
 
-console.log('✅ Relatório executivo gerado com sucesso!');
-console.log(`📄 Localização: ${reportPath}`);
-console.log(`\n${report}`);
+  console.log('✅ Relatório executivo gerado com sucesso!');
+  console.log(`📄 Localização: ${reportPath}\n`);
+  console.log(report);
+
+} catch (error) {
+  console.error('❌ Erro ao processar resultados:', error.message);
+  process.exit(1);
+}

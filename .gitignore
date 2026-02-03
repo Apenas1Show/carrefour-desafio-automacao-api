@@ -1,6 +1,5 @@
 # Depenencias do desafio
 node_modules/
-package-lock.json
 yarn.lock
 
 # variáveis de ambiente
